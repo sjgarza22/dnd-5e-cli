@@ -1,0 +1,7 @@
+class Subclass
+
+    @@all = []
+
+    
+
+end

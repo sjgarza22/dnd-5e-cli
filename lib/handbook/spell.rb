@@ -20,13 +20,13 @@ class Spell
         ENDPOINT
     end
 
-    def find_by_name(name)
+    def self.find_by_name(name)
         self.all.find {|spell| spell.name == name}
     end
 
-    def find_or_create_by_name(name)
+    def self.find_or_create_by_name(name)
         if !(find_by_name(name))
-            create(name)
+            Spell.new(name)
         else
             find_by_name(name)
         end

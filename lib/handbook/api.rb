@@ -5,11 +5,13 @@ class Api
     # load method will use base url and provided endpoint to GET data
     def self.load(endpoint)
         response = Net::HTTP.get(URI("#{BASE_URL}#{endpoint}")) # this is how we'll grab our data
-        data = json_to_array(response)  # converts the JSON to a Ruby friendly array
+        data = json_to_array(response)  # converts the JSON to a Ruby friendly array of hashes
+        # binding.pry
+        data
     end
 
     # Will convert Json data to readable Ruby array
-    def json_to_array(data)
+    def self.json_to_array(data)
         JSON.parse(data)
     end
 

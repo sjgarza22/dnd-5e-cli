@@ -1,8 +1,8 @@
 class AdventureGear < Equipment
 
     def self.create(name, url, description = nil)
-        self.new(name, url)
         @description = description
+        self.new(name, url)
     end
 
     def fill_attributes(data)

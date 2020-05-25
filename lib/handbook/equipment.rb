@@ -1,10 +1,14 @@
 class Equipment
-    attr_reader :name
+    extend Concerns::Findable
+
+    attr_reader :name, :url
     ENDPOINT = "equipment"
     @@all = []
 
-    def initialize(name)
+    def initialize(name, url, equipment_category = nil)
         @name = name
+        @url = url
+        @equipment_category = equipment_category
         save
     end
 
@@ -18,17 +22,5 @@ class Equipment
 
     def self.endpoint
         ENDPOINT
-    end
-
-    def self.find_by_name(name)
-        self.all.find {|spell| spell.name == name}
-    end
-
-    def self.find_or_create_by_name(name)
-        if !(find_by_name(name))
-            Spell.new(name)
-        else
-            find_by_name(name)
-        end
     end
 end

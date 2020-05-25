@@ -4,7 +4,7 @@
 In this README, you will learn how to install and use DND 5E Command Line Interface (CLI).
 
 ## Description
-This program will allow the user to 
+This program will allow the user to peruse through the information from the 5th Edition of the Dungeons and Dragon's Handbook.
 
 ## Installation
 To install this program, please clone the repository.

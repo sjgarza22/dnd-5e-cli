@@ -1,5 +1,5 @@
 class Equipment
-    extend Concerns::Findable
+    extend Findable
 
     attr_reader :name, :url
     ENDPOINT = "equipment"
@@ -28,17 +28,31 @@ class Equipment
 
         case data["equipment_category"]
         when "Weapon"
-            Weapon.new(name, url).fill_attributes(data)
+            equip = Weapon.new(name, url)
+            @@all << equip
+            equip.fill_attributes(data)
+            equip
         when "Mounts and Vehicles"
-            Vehicle.create(name, url).fill_attributes(data)
+            equip = Vehicle.create(name, url)
+            @@all << equip
+            equip.fill_attributes(data)
+            equip
         when "Adventuring Gear"
-            AdventureGear.create(name, url).fill_attributes(data)
+            equip = AdventureGear.create(name, url)
+            @@all << equip
+            equip.fill_attributes(data)
+            equip
+            
         when "Tools"
-            Tool.create(name, url).fill_attributes(data)
+            equip = Tool.create(name, url)
+            @@all << equip
+            equip.fill_attributes(data)
+            equip
         when "Armor"
-            Armor.create(name, url).fill_attributes(data)
-        else
-            puts "Error"
+            equip = Armor.create(name, url)
+            @@all << equip
+            equip.fill_attributes(data)
+            equip
         end
     end
 end

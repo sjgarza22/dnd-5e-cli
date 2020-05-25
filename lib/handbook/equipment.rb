@@ -5,10 +5,9 @@ class Equipment
     ENDPOINT = "equipment"
     @@all = []
 
-    def initialize(name, url, equipment_category = nil)
+    def initialize(name, url)
         @name = name
         @url = url
-        @equipment_category = equipment_category
         save
     end
 
@@ -22,5 +21,24 @@ class Equipment
 
     def self.endpoint
         ENDPOINT
+    end
+
+    def self.create(name, url)
+        data = Api.load_attributes(url)
+
+        case data["equipment_category"]
+        when "Weapon"
+            Weapon.new(name, url).fill_attributes(data)
+        when "Mounts and Vehicles"
+            Vehicle.create(name, url).fill_attributes(data)
+        when "Adventuring Gear"
+            AdventureGear.create(name, url).fill_attributes(data)
+        when "Tools"
+            Tool.create(name, url).fill_attributes(data)
+        when "Armor"
+            Armor.create(name, url).fill_attributes(data)
+        else
+            puts "Error"
+        end
     end
 end

@@ -45,6 +45,7 @@ class Weapon < Equipment
         puts " Normal: #{@range_normal}"
         puts " Long: #{@range_long}\n\n"
         puts "Weight: #{@weight}\n\n"
+        puts "Properties:"
         @properties.each {|property| puts property}
         if @two_handed_weapon == true
             puts "\nTwo-handed Damage"

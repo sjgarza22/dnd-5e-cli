@@ -1,7 +1,7 @@
 class Cli
     
     def run
-        @alphabet = Array.new(27, " ")
+        @alphabet = Array.new(26, " ")
         @alphabet.each_with_index do |block, index|
             if index == 0
                 @alphabet[index] = "a"
@@ -26,23 +26,17 @@ class Cli
             puts @ask
             main_menu
             selection = gets.to_i
-            # puts "Please select a number from the following menu: "
-            # main_menu
-            # selection = gets.strip.to_i
-            # if !(selection >= 0 && selection <=2)
-            #     puts "That is not a correct selection."
-            # end
         end
     end
 
     def main_menu
-        puts " 1. Handbook"
+        puts "\n 1. Handbook"
         puts " 2. About"
         puts " 0. Exit"
     end
 
     def search_or_list_menu(choice)
-        puts " 1. Browse by Alphabetized List"
+        puts "\n 1. Browse by Alphabetized List"
         puts " 2. Search by Name"
         selection = gets.to_i
         if selection == 1
@@ -58,7 +52,7 @@ class Cli
 
     def handbook_main_menu
         puts @ask
-        puts " 1. Classes"
+        puts "\n 1. Classes"
         puts " 2. Races"
         puts " 3. Equipment"
         puts " 4. Spells"
@@ -86,17 +80,27 @@ class Cli
 
     def list(selection)
         if selection == 1
-           data = Api.load(PlayerClass.endpoint)
-           data["results"].each {|block| PlayerClass.find_or_create_by_name(block["name"])}
-           # Create fill class that will fill in the rest of the information using the url provided
+            data = Api.load(PlayerClass.endpoint)
+            data["results"].each {|block| PlayerClass.find_or_create_by_name(block["name"], block["url"])}
 
-           PlayerClass.all.each_with_index {|player_class, index| puts " #{index + 1}. #{player_class.name}"}
+            PlayerClass.all.each_with_index {|player_class, index| puts " #{index + 1}. #{player_class.name}"}
+            chosen_class = gets.to_i
+            selected = PlayerClass.all.fetch(chosen_class - 1)
+            fill_data = Api.load_attributes(selected.attributes_url)
+            selected.fill_attributes(fill_data)
+            selected.print
         else
             data = Api.load(Race.endpoint)
-            data["results"].each {|block| Race.find_or_create_by_name(block["name"])}
+            # binding.pry
+            data["results"].each {|block| Race.find_or_create_by_name(block["name"], block["url"])}
            # Create fill class that will fill in the rest of the information using the url provided
 
            Race.all.each_with_index {|race, index| puts " #{index + 1}. #{race.name}"}
+           chosen_class = gets.to_i
+           selected = Race.all.fetch(chosen_class - 1)
+           fill_data = Api.load_attributes(selected.url)
+           selected.fill_attributes(fill_data)
+           selected.print
         end
 
     end
@@ -108,17 +112,26 @@ class Cli
         input = gets.to_i
         if selection == 3
             data = Api.load("#{Equipment.endpoint}")
-            
-            binding.pry
-            # data["results"].select {|equipment| equipment["index"][0] == 'a'}
-            if data != nil
-                Equipment.find_or_create_by_name(data["name"])
-            end
         elsif selection == 4
-
+            data = Api.load("#{Spell.endpoint}")
         else
-
+            data = Api.load("#{Monster.endpoint}")
         end
+
+        selected = data["results"].select {|info| info["index"][0] == @alphabet[input - 1]}
+        # binding.pry
+        selected.each_with_index {|d, index| puts "#{index + 1}. #{d["name"]}"}
+        puts @ask
+        index = gets.to_i
+            if selected[index - 1] != nil
+                if selection == 3
+                    Equipment.find_or_create_by_name(selected[index - 1]["name"], selected[index - 1]["url"]).fill_attributes.print
+                elsif selection == 4
+                    Spell.find_or_create_by_name(selected[index - 1]["name"], selected[index - 1]["url"]).fill_attributes.print
+                else
+                    Monster.find_or_create_by_name(selected[index - 1]["name"], selected[index - 1]["url"]).fill_attributes.print
+                end
+            end
     end
 
     def search(selection)

@@ -1,4 +1,6 @@
 class Race
+    extend Findable
+
     ENDPOINT = "races"
     attr_reader :name, :url
     @@all = []
@@ -75,16 +77,7 @@ class Race
         end
     end
 
-
-    def self.find_by_name(name)
-        self.all.find {|race| race.name == name}
-    end
-
-    def self.find_or_create_by_name(name, url)
-        if !(find_by_name(name))
-            Race.new(name, url)
-        else
-            find_by_name(name)
-        end
+    def self.create(name, url)
+        self.new(name, url)
     end
 end

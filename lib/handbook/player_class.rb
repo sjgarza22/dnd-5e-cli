@@ -1,6 +1,7 @@
 class PlayerClass
-    attr_accessor :attributes_url
-    attr_reader :name, :hit_die, :prof_choices, :prof_choices_amt, :proficiencies, :saving_throws, :equipment, :class_levels, :subclasses, :spellcasting
+    extend Findable
+
+    attr_reader :name, :attributes_url
     ENDPOINT = "classes"
     @@all = []
 
@@ -59,15 +60,7 @@ class PlayerClass
         @subclasses.each {|subclass| puts "#{subclass}"}
     end
 
-    def self.find_by_name(name)
-        self.all.find {|player_class| player_class.name == name}
-    end
-
-    def self.find_or_create_by_name(name, url)
-        if !(find_by_name(name))
-            PlayerClass.new(name, url)
-        else
-            find_by_name(name)
-        end
+    def self.create(name, url)
+        self.new(name, url)
     end
 end

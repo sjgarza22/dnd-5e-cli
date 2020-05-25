@@ -1,7 +1,8 @@
 class Vehicle < Equipment
-    def self.create(name, url, description = nil)
-        self.new(name, url)
+    def self.create(name, url, description = nil, speed = nil)
+        @speed = speed
         @description = description
+        self.new(name, url)
     end
 
     def fill_attributes(data)
@@ -27,6 +28,10 @@ class Vehicle < Equipment
         puts "Vehicle Category: #{@vehicle_category}\n\n"
         puts "Cost: #{@cost}\n\n"
         puts "Weight: #{@weight}\n\n"
+        if @speed != nil
+            puts "Speed: #{@speed}\n\n"
+            puts "Capacity: #{@capacity}\n\n"
+        end
         if @description != nil
             puts "Description: #{@description}\n\n"
         end

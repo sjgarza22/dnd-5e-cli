@@ -1,13 +1,13 @@
 class PlayerClass
     extend Findable
 
-    attr_reader :name, :attributes_url
+    attr_reader :name, :url
     ENDPOINT = "classes"
     @@all = []
 
-    def initialize(name, attributes_url, hit_die = nil, prof_choices_amt = nil, class_levels_url = nil, equipment_url = nil, spellcasting_url = nil)
+    def initialize(name, url, hit_die = nil, prof_choices_amt = nil, class_levels_url = nil, equipment_url = nil, spellcasting_url = nil)
         @name = name
-        @attributes_url = attributes_url
+        @url = url
         @hit_die = hit_die
         @prof_choices = []
         @prof_choices_amt = prof_choices_amt
@@ -49,7 +49,7 @@ class PlayerClass
     end
 
     def print
-        puts "#{@name}\n\n"
+        puts "\n#{@name}\n\n"
         puts "Hit Die: #{@hit_die}\n\n"
         puts "Proficiency Choices Amount: #{@prof_choices_amt}\n\n"
         puts "Proficiency Choices: "

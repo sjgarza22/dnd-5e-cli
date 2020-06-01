@@ -41,6 +41,11 @@ class Race
         @speed = data["speed"]
         data["ability_bonuses"].each {|ability| @ability_bonuses << {"name" => ability["name"], "bonus" => ability["bonus"]}}
         # Add ability bonus options & amt
+        @ability_bonus_options = []
+        if data.key?("ability_bonus_options")
+            @ability_bonus_options_amt = data["ability_bonus_options"]["choose"]
+            data["ability_bonus_options"]["from"].each {|ability_option| @ability_bonus_options << {"name" => ability["name"], "bonus" => ability["bonus"]}}
+        end
         @alignment = data["alignment"]
         @age = data["age"]
         @size = data["size"]
@@ -57,7 +62,7 @@ class Race
     end
 
     def print
-        puts "#{@name}\n\n"
+        puts "\n#{@name}\n\n"
         puts "Speed: #{@speed}\n\n"
         puts "Ability Bonuses:"
         @ability_bonuses.each {|ability| puts "#{ability["name"]}\nBonus: #{ability["bonus"]}"}

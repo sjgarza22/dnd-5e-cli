@@ -9,7 +9,8 @@ class Cli
                 @alphabet[index] = @alphabet[index - 1].next
             end
         end
-        @ask = "Please enter a number from the following menu or enter 0 to exit: "
+        @ask = "\nPlease enter a number from the following menu or enter 0 to exit: "
+        @incorrect = "\nThat is not a correct selection. Please select a number from the following menu: "
     end
     
     def run
@@ -35,7 +36,7 @@ class Cli
     def main_menu
         puts "\n 1. Handbook"
         puts " 2. About"
-        puts " 0. Exit"
+        puts " 0. Exit\n\n"
     end
 
     def handbook_main_menu
@@ -43,15 +44,14 @@ class Cli
         puts "\n 1. Classes"
         puts " 2. Races"
         puts " 3. Equipment"
-        puts " 4. Spells"
-        puts ""
+        puts " 4. Spells\n\n"
         handbook_selection
     end
 
     def handbook_selection
         selection = gets.to_i
         if selection >= 1 && selection <=4
-            puts @ask
+            puts "#{@ask}\n\n"
             if selection == 1 || selection == 2
                 list(selection)
             else
@@ -60,32 +60,25 @@ class Cli
         elsif selection == 0
             exit
         else
-            puts "That is not a correct selection. Please enter a number from the following menu: "
+            puts @incorrect
             handbook_main_menu
         end
     end
 
     def list(selection)
         if selection == 1
-            data = Api.load(PlayerClass.endpoint)
-            data["results"].each {|block| PlayerClass.find_or_create_by_name(block["name"], block["url"])}
-            PlayerClass.all.each_with_index {|player_class, index| puts " #{index + 1}. #{player_class.name}"}
-            chosen_class = gets.to_i
-            selected = PlayerClass.all.fetch(chosen_class - 1)
-            fill_data = Api.load_attributes(selected.attributes_url)
-            selected.fill_attributes(fill_data)
-            selected.print
+            option = PlayerClass 
         else
-            data = Api.load(Race.endpoint)
-            data["results"].each {|block| Race.find_or_create_by_name(block["name"], block["url"])}
-            Race.all.each_with_index {|race, index| puts " #{index + 1}. #{race.name}"}
-            chosen_class = gets.to_i
-            selected = Race.all.fetch(chosen_class - 1)
+            option = Race
+        end
+            data = Api.load(option.endpoint)
+            data["results"].each {|block| option.find_or_create_by_name(block["name"], block["url"])}
+            option.all.each_with_index {|item, index| puts " #{index + 1}. #{item.name}"}
+            index = gets.to_i
+            selected = option.all.fetch(index - 1)
             fill_data = Api.load_attributes(selected.url)
             selected.fill_attributes(fill_data)
             selected.print
-        end
-
     end
 
     def search_or_list_menu(choice)
@@ -100,7 +93,7 @@ class Cli
         elsif selection == 0
             exit
         else
-            puts "That is not a correct selection. Please enter a number from the following menu: "
+            puts @incorrect
             search_or_list_menu(choice)
         end 
     end
@@ -111,13 +104,14 @@ class Cli
         puts " "
         input = gets.to_i
         if selection == 3
-            data = Api.load("#{Equipment.endpoint}")
+            option = Equipment
         elsif selection == 4
-            data = Api.load("#{Spell.endpoint}")
+            option = Spell
         elsif selection == 0
             exit
         end
 
+        data = Api.load("#{option.endpoint}")
         selected = data["results"].select {|info| info["index"][0] == @alphabet[input - 1]}
         selected.each_with_index {|d, index| puts "#{index + 1}. #{d["name"]}"}
         puts @ask
@@ -128,10 +122,8 @@ class Cli
                 else selection == 4
                     spell = Spell.find_or_create_by_name(selected[index - 1]["name"], selected[index - 1]["url"])
                     data = Api.load_attributes(spell.url)
-                    # binding.pry
                     spell.fill_attributes(data)
-                    spell.print
-                    
+                    spell.print 
                 end
             end
     end
@@ -142,15 +134,18 @@ class Cli
         puts "Please enter the search term: "
         name = gets.strip
         if selection == 3
-            data = Api.load("#{Equipment.endpoint}?name=#{name}")
-            if data != nil
-                Equipment.find_or_create_by_name(data["results"][0]["name"], data["results"][0]["url"]).print
-            end
+            option = Equipment
+            # data = Api.load("#{Equipment.endpoint}?name=#{name}")
+            # if data != nil
+            #     Equipment.find_or_create_by_name(data["results"][0]["name"], data["results"][0]["url"]).print
+            # end
         else
-            data = Api.load("#{Spell.endpoint}?name=#{name}")
-            if data != nil
-                Spell.find_or_create_by_name(data["results"][0]["name"], data["results"][0]["url"]).print
-            end
+            option = Spell
+            
         end
+        data = Api.load("#{option.endpoint}?name=#{name}")
+            if data != nil
+                option.find_or_create_by_name(data["results"][0]["name"], data["results"][0]["url"]).print
+            end
     end
 end

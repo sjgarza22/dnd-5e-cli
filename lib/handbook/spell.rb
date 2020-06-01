@@ -26,7 +26,10 @@ class Spell
     def self.create(name, url, higher_level = nil, material = nil)
         @material = material
         @higher_level = higher_level
-        self.new(name, url)
+        new_spell = self.new(name, url)
+        data = Api.load_attributes(url)
+        new_spell.fill_attributes(data)
+        new_spell
     end
 
     def fill_attributes(data)
@@ -53,7 +56,7 @@ class Spell
     end
 
     def print
-        puts "#{@name}\n\n"
+        puts "\n#{@name}\n\n"
         puts "Description: #{@description}\n\n"
         if @higher_level != nil
             puts "Higher Level: #{@higher_level}\n\n"

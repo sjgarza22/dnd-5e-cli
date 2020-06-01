@@ -58,7 +58,7 @@ class Cli
                 search_or_list_menu(selection)
             end            
         elsif selection == 0
-            return
+            exit
         else
             puts "That is not a correct selection. Please enter a number from the following menu: "
             handbook_main_menu
@@ -97,6 +97,8 @@ class Cli
             alphabetized_list(choice)
         elsif selection == 2
             search(choice)
+        elsif selection == 0
+            exit
         else
             puts "That is not a correct selection. Please enter a number from the following menu: "
             search_or_list_menu(choice)
@@ -110,8 +112,10 @@ class Cli
         input = gets.to_i
         if selection == 3
             data = Api.load("#{Equipment.endpoint}")
-        else selection == 4
+        elsif selection == 4
             data = Api.load("#{Spell.endpoint}")
+        elsif selection == 0
+            exit
         end
 
         selected = data["results"].select {|info| info["index"][0] == @alphabet[input - 1]}
@@ -122,7 +126,12 @@ class Cli
                 if selection == 3
                     Equipment.find_or_create_by_name(selected[index - 1]["name"], selected[index - 1]["url"]).print
                 else selection == 4
-                    Spell.find_or_create_by_name(selected[index - 1]["name"], selected[index - 1]["url"]).fill_attributes.print
+                    spell = Spell.find_or_create_by_name(selected[index - 1]["name"], selected[index - 1]["url"])
+                    data = Api.load_attributes(spell.url)
+                    # binding.pry
+                    spell.fill_attributes(data)
+                    spell.print
+                    
                 end
             end
     end

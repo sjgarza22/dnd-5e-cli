@@ -17,7 +17,7 @@ class Tool < Equipment
     end
 
     def print
-        puts "#{@name}\n\n"
+        puts "\n#{@name}\n\n"
         puts "Equipment Category: #{@equipment_category}\n\n"
         puts "Tool Category: #{@tool_category}\n\n"
         puts "Cost: #{@cost}\n\n"

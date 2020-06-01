@@ -23,7 +23,7 @@ class Vehicle < Equipment
     end
 
     def print
-        puts "#{@name}\n\n"
+        puts "\n#{@name}\n\n"
         puts "Equipment Category: #{@equipment_category}\n\n"
         puts "Vehicle Category: #{@vehicle_category}\n\n"
         puts "Cost: #{@cost}\n\n"

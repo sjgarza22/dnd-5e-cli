@@ -31,7 +31,7 @@ class Weapon < Equipment
     end
 
     def print
-        puts "#{@name}\n\n"
+        puts "\n#{@name}\n\n"
         puts "Equipment Category: #{@equipment_category}\n\n"
         puts "Weapon Category: #{@weapon_category}\n\n"
         puts "Weapon Range: #{@weapon_range}\n\n"

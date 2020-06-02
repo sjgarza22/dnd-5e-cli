@@ -44,7 +44,7 @@ class Race
         @ability_bonus_options = []
         if data.key?("ability_bonus_options")
             @ability_bonus_options_amt = data["ability_bonus_options"]["choose"]
-            data["ability_bonus_options"]["from"].each {|ability_option| @ability_bonus_options << {"name" => ability["name"], "bonus" => ability["bonus"]}}
+            data["ability_bonus_options"]["from"].each {|ability_option| @ability_bonus_options << {"name" => ability_option["name"], "bonus" => ability_option["bonus"]}}
         end
         @alignment = data["alignment"]
         @age = data["age"]
@@ -57,7 +57,7 @@ class Race
         @language_options = []
         if data.key?("language_options")
             @language_options_amt = data["language_options"]["choose"]
-            data["language_options"]["from"].each {|language_option| @language_options << {"name" => ability["name"], "bonus" => ability["bonus"]}}
+            data["language_options"]["from"].each {|language_option| @language_options << {"name" => language_option["name"]}}
         end
         data["traits"].each {|trait| @traits << trait["name"]}
         if data.key?("trait_options")
@@ -74,7 +74,7 @@ class Race
         if @ability_bonus_options != []
             puts "Ability Bonus Options Amount: #{@ability_bonus_options_amt}\n\n"
             puts "Ability Bonus Options:"
-            @ability_bonus_options.each {|ability| puts "#{ability["name"]}\nBonus: #{ability["bonus"]}"}
+            @ability_bonus_options.each {|ability_option| puts "#{ability_option["name"]}\nBonus: #{ability_option["bonus"]}"}
         end
         puts "\nAlignment: #{@alignment}"
         puts "\nAge: #{@age}"
@@ -86,7 +86,7 @@ class Race
         if @language_options != []
             puts "\nLanguage Options Amount: #{@ability_bonus_options_amt}\n\n"
             puts "Language Options:"
-            @ability_bonus_options.each {|ability| puts "#{ability["name"]}\nBonus: #{ability["bonus"]}"}
+            @language_options.each {|language_option| puts "#{language_option["name"]}"}
         end
         puts "\nTraits: "
         @traits.each {|trait| puts "#{trait}"}

@@ -54,6 +54,11 @@ class Race
         data["languages"].each {|language| @languages << language["name"]}
         @language_desc = data["language_desc"]
         # Add language choice options & amt
+        @language_options = []
+        if data.key?("language_options")
+            @language_options_amt = data["language_options"]["choose"]
+            data["language_options"]["from"].each {|language_option| @language_options << {"name" => ability["name"], "bonus" => ability["bonus"]}}
+        end
         data["traits"].each {|trait| @traits << trait["name"]}
         if data.key?("trait_options")
             @trait_options_choice = data["trait_options"]["choose"]
@@ -66,6 +71,11 @@ class Race
         puts "Speed: #{@speed}\n\n"
         puts "Ability Bonuses:"
         @ability_bonuses.each {|ability| puts "#{ability["name"]}\nBonus: #{ability["bonus"]}"}
+        if @ability_bonus_options != []
+            puts "Ability Bonus Options Amount: #{@ability_bonus_options_amt}\n\n"
+            puts "Ability Bonus Options:"
+            @ability_bonus_options.each {|ability| puts "#{ability["name"]}\nBonus: #{ability["bonus"]}"}
+        end
         puts "\nAlignment: #{@alignment}"
         puts "\nAge: #{@age}"
         puts "\nSize: #{@size}"
@@ -73,6 +83,11 @@ class Race
         puts "\nLanguages: "
         @languages.each {|language| puts "#{language}"}
         puts "\nLanguage Description: #{@language_desc}"
+        if @language_options != []
+            puts "\nLanguage Options Amount: #{@ability_bonus_options_amt}\n\n"
+            puts "Language Options:"
+            @ability_bonus_options.each {|ability| puts "#{ability["name"]}\nBonus: #{ability["bonus"]}"}
+        end
         puts "\nTraits: "
         @traits.each {|trait| puts "#{trait}"}
         if @trait_options != []
